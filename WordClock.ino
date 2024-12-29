@@ -1,14 +1,9 @@
 #include <FastLED.h>
-#include <WiFi.h>
+#include <WiFiManager.h>
 #include "time.h"
 
-// Wifi Setup Stuff
-const char* ssid = "WackyWednesday";
-const char* password = "c3l3str0";
-
+// NTP Info
 const char* ntpServer = "0.pool.ntp.org";
-const long gmtOffset_sec = -18000; // EST Time Zone
-const long daylightOffset_sec = 3600;
 
 // Time data
 struct tm timeinfo;
@@ -91,16 +86,24 @@ void setup() {
     FastLED.setBrightness(70);
     FastLED.clear();
 
+    fill_solid(leds,NUM_LEDS, 0);
+    leds(250,247) = CRGB::DarkOrange;
+    leds(229,232) = CRGB::DarkOrange;
+    FastLED.show();
+
     Serial.begin(115200);
 
-    Serial.print("Connecting to ");
-    Serial.println(ssid);
-    WiFi.begin(ssid,password);
-    while(WiFi.status() != WL_CONNECTED) {
-        delay(500);
-        Serial.print(".");
-    }
+    WiFi.mode(WIFI_STA);
+    WiFiManager wfm;
 
+    bool res;
+
+    // wfm.resetSettings();  // Uncomment for debugging WifiManager
+    res = wfm.autoConnect("WordClock");
+
+    if (!res) {
+        Serial.println("Failed to connect");
+    } 
     Serial.println("");
     Serial.println("WiFi connected.");
 
@@ -292,6 +295,8 @@ void loop() {
 
     uint8_t hue = 224;
 
+    fill_solid(leds,NUM_LEDS, 0);
+
     // Grab time and update the timeleds array    
     printLocalTime();
 
@@ -302,6 +307,5 @@ void loop() {
 
     FastLED.delay(15000);
     
-    fill_solid(leds,NUM_LEDS, 0);
     
 }
