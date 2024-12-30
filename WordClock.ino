@@ -97,7 +97,7 @@ void setup() {
     WiFiManager wfm;
 
     bool res;
-
+ 
     // wfm.resetSettings();  // Uncomment for debugging WifiManager
     res = wfm.autoConnect("WordClock");
 
