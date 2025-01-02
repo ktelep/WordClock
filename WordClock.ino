@@ -140,14 +140,16 @@ void printIPAddress() {
       break;
     }
 
-    timeleds[cur_pos] = -1;
+    timeleds[cur_pos] = 0;
 
     uint8_t j = 0;
 
     while(timeleds[j] > 0) {
       leds[timeleds[j]] = CHSV(123,230,255);
       j++;
-      Serial.println(j);
+      Serial.print(j);
+      Serial.print(" - ");
+      Serial.println(timeleds[j]);
     }
 
     FastLED.delay(1000);
@@ -285,7 +287,7 @@ void printLocalTime() {
     Serial.print(" MINUTES");
   }
 
-  timeleds[cur_pos] = -1;
+  timeleds[cur_pos] = 0;
   
 }
 
